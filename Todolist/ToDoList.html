@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo App</title>
+
+  <!-- Font Awesome for icons -->
+  <script src="https://kit.fontawesome.com/d5f22ee4f8.js" crossorigin="anonymous"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #ac48d7;
+    }
+
+    .main-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .ta-container {
+      background: #ffffff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .heading h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    .input-wrapper {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    #todo-input {
+      flex: 1;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    #submit {
+      padding: 10px 20px;
+      border: none;
+      background-color: #bd0000;
+      color: rgb(26, 210, 109);
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    #submit:hover {
+      background-color: #ae48ee;
+    }
+
+    .todo-lists .todo-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f9f9f9;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .todo-item input.text {
+      border: none;
+      background: none;
+      font-size: 1rem;
+      width: 100%;
+      color: #333;
+    }
+
+    .todo-item input.text:read-only {
+      color: #333;
+    }
+
+    .action-items i {
+      margin-left: 10px;
+      cursor: pointer;
+      color: #555;
+    }
+
+    .action-items i:hover {
+      color: #000;
+    }
+
+    .completed input.text {
+      text-decoration: line-through;
+      color: gray;
+    }
+  </style>
+  <!-- Add inside <head> -->
+<link rel="stylesheet" href="yle.css">
+
+
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="ta-container">
+      <div class="heading">
+        <h1>Todo App</h1>
+      </div>
+      <div class="ta-wrapper">
+        <div class="input-wrapper">
+          <input type="text" id="todo-input" placeholder="Add a new task">
+          <button id="submit">Add</button>
+        </div>
+        <div class="todo-lists" id="todo-list">
+          <!-- Dynamic tasks appear here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById("todo-input");
+    const submit = document.getElementById("submit");
+    const list = document.getElementById("todo-list");
+
+    submit.addEventListener("click", () => {
+      const task = input.value.trim();
+      if (!task) return;
+
+      const todoItem = document.createElement("div");
+      todoItem.classList.add("todo-item");
+
+      todoItem.innerHTML = `
+        <div>
+          <input type="text" class="text" value="${task}" readonly>
+        </div>
+        <div class="action-items">
+          <i class="fa-solid fa-check"></i>
+          <i class="fa-solid fa-pen-to-square edit"></i>
+          <i class="fa-solid fa-trash"></i>
+        </div>
+      `;
+
+      // Add actions
+      const checkBtn = todoItem.querySelector(".fa-check");
+      const editBtn = todoItem.querySelector(".edit");
+      const deleteBtn = todoItem.querySelector(".fa-trash");
+      const textInput = todoItem.querySelector(".text");
+
+      checkBtn.addEventListener("click", () => {
+        todoItem.classList.toggle("completed");
+      });
+
+      editBtn.addEventListener("click", () => {
+        if (textInput.readOnly) {
+          textInput.readOnly = false;
+          textInput.focus();
+          editBtn.classList.remove("fa-pen-to-square");
+          editBtn.classList.add("fa-save");
+        } else {
+          textInput.readOnly = true;
+          editBtn.classList.remove("fa-save");
+          editBtn.classList.add("fa-pen-to-square");
+        }
+      });
+
+      deleteBtn.addEventListener("click", () => {
+        todoItem.remove();
+      });
+
+      list.appendChild(todoItem);
+      input.value = "";
+    });
+
+    // Allow adding with Enter key
+    input.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        submit.click();
+      }
+    });
+  </script>
+
+</body>
+</html>
